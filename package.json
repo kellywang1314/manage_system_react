@@ -14,8 +14,11 @@
   "author": "ynan_wang",
   "license": "ISC",
   "dependencies": {
+    "antd": "^3.19.2",
+    "babel-plugin-import": "^1.12.0",
     "babel-preset-react": "^6.24.1",
     "gulp": "^4.0.2",
+    "moment": "^2.24.0",
     "parcel-bundler": "^1.12.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

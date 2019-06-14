@@ -1,0 +1,15 @@
+.hearderleft{
+    padding-left: 25px
+}
+.title{
+    font-size: 18px;
+    color: aliceblue;
+    float:left
+}
+.titleIcon{
+    margin-right: 10px
+}
+.down{
+    font-size: 12px;
+    margin-left: 5px
+}
