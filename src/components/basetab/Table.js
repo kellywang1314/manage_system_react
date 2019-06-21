@@ -1,36 +1,9 @@
 import React from 'react'
-import { Layout,Table, Icon, Switch, Radio, Form, Divider,Button,Card } from 'antd';
+import moment from 'moment'
+import {isEmpty} from '../../share/utils'
+import { Layout,Table, Icon, Divider,Button, Modal,Popconfirm,Input,DatePicker,Form  } from 'antd';
 const { Content} = Layout
-const pagenum = 3
-export default class TableList extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-          isShowCards:false
-        }
-    }
-
-    render(){
-        const {isShowCards} = this.state
-        return(
-            <Content
-                style={{
-                background: '#fff',
-                padding: 24,
-                margin: 0,
-                minHeight: 680,
-                }}
-            >
-                <LoadMoreList />
-                {isShowCards && <Cards />}
-            </Content>
-        )
-    }
-}
-
-const FormItem = Form.Item;
-
-
+//mock数据
 const data = [];
 for (let i = 0; i < 46; i++) {
   data.push({
@@ -41,38 +14,76 @@ for (let i = 0; i < 46; i++) {
     address: `London, Park Lane no. ${i}`,
   });
 }
-const EditableContext = React.createContext();
+export default class TableList extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = {
+          isShowCards:false,
+          editRecord:{},
+          editedRecord:{}
+        }
+    }
+
+    handleToggleEdit(state,record){
+      this.setState({isShowCards:state,editRecord:record})
+    }
+    handleEdited(state,record){
+      this.setState({isShowCards:state,editedRecord:record})
+    }
+    render(){
+        const { isShowCards,editRecord,editedRecord } = this.state
+        return(
+            <Content
+                style={{
+                background: '#fff',
+                padding: 24,
+                margin: 0,
+                minHeight: 680,
+                }}
+            >
+                <LoadMoreList 
+                  state={{isShowCards,editRecord,editedRecord}} 
+                  handleToggleEdit={this.handleToggleEdit.bind(this)}
+                  />
+                {isShowCards && <Cards  state={{isShowCards,editRecord}}  handleEdited={this.handleEdited.bind(this)}/>}
+            </Content>
+        )
+    }
+}
 
 class LoadMoreList extends React.Component {
     constructor(props){
       super(props)
       this.columns = [
         {
-          title: 'Name',
+          title: 'name',
           dataIndex: 'name',
         },
         {
-          title:'Date',
+          title:'date',
           dataIndex: 'date',
         },
         {
-          title: 'Age',
+          title: 'Aage',
           dataIndex: 'age',
         },
         {
-          title: 'Address',
+          title: 'address',
           dataIndex: 'address',
         },
         {
-          title: 'Action',
+          title: 'action',
           key: 'action',
           width: 360,
           render: (text, record) => (
             <span>
-              <a href="javascript:;"><Icon type="edit" theme='twoTone' style={{color:'blue'}}/>编辑</a>
-              <Divider type="vertical" />
-              <a href="javascript:;"><Icon type="delete"  theme='twoTone' twoToneColor='red'/>删除</a>
-              <Divider type="vertical" />
+                <a href="javascript:;" onClick={() => this.handleEdit(record)}><Icon type="edit" theme='twoTone' style={{color:'blue'}}/>编辑</a>
+                <Divider type="vertical" />
+                <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record)}>
+                  <a href="javascript:;"><Icon type="delete"  theme='twoTone' twoToneColor='red'/>删除</a>
+                  <Divider type="vertical" />
+                </Popconfirm>
+              
             </span>
           )
         }
@@ -80,57 +91,157 @@ class LoadMoreList extends React.Component {
       this.state = {
         selectedRowKeys: [],
         loading: false,
-        isShowCards:this.props.isShowCards
+        isShowCards:this.props.state.isShowCards,
+        editRecord:this.props.state.editRecord,
+        editedRecord:this.props.state.editedRecord,
+        datalist: data,
+        count:46
       }
     }
 
-    start () {
-      this.setState({ loading: true });
-      setTimeout(() => {
+    componentWillReceiveProps(nextprops){
+      if(this.state.editedRecord!==nextprops.state.editedRecord){
         this.setState({
-          selectedRowKeys: [],
-          loading: false,
-        });
-      }, 1000);
-    };
-  
+          editedRecord:nextprops.state.editedRecord,
+          editRecord:nextprops.state.editRecord
+        })
+      }
+    }
+    handleDelete (record) {
+      let { datalist } = this.state
+      this.setState({datalist:datalist.filter(item => item.key !==record.key)})
+    }
+
     onSelectChange (selectedRowKeys){
       console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.setState({ selectedRowKeys });
-    };
-  
+    }
+
+    handleAdd() {
+
+    }
+
+    handleEdit(record) {
+      this.props.handleToggleEdit(true,record)
+    }
     render() {
-      const { loading, selectedRowKeys } = this.state;
+      let { selectedRowKeys,datalist,editedRecord,editRecord } = this.state
       const rowSelection = {
         selectedRowKeys,
         onChange: this.onSelectChange.bind(this),
-      };
-      const hasSelected = selectedRowKeys.length > 0;
+      }
+      let res=[]
+      if(!isEmpty(editedRecord) && !isEmpty(editRecord)){
+         res = datalist.map((item,index)=>{
+          if(item.key === editRecord.key){
+            item = editedRecord
+          }
+          item = item
+          return item
+        })
+      }
+      !isEmpty(res) ? datalist = res : ''
       return (
         <div>
           <div style={{ marginBottom: 16 }}>
-            <Button type="primary" onClick={() => this.start()} disabled={!hasSelected} loading={loading}>
-              Reload
+            <Button type="primary" onClick={() => this.handleAdd()}>
+              添加
             </Button>
-            <span style={{ marginLeft: 8 }}>
-              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-            </span>
           </div>
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+          <Table 
+            rowSelection={rowSelection} 
+            columns={this.columns} 
+            dataSource={datalist} 
+          />
         </div>
       );
     }
 }
 
+
 class Cards extends React.Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      visible:this.props.state.isShowCards,
+      editRecord:this.props.state.editRecord,
+      date:this.props.state.editRecord.date,
+      name:this.props.state.editRecord.name,
+      age:this.props.state.editRecord.age,
+      address:this.props.state.editRecord.address
+    }
+  }
+  handleCancle(){
+    this.setState({visible:false})
+  }
+  handleOk(e){
+    const {name,age,address,date,editRecord} = this.state
+    this.setState({visible:false})
+    let newitem = {key:editRecord.key,name:name,date:date,age:age,address:address}
+    this.props.handleEdited(false,newitem)
+  }
+  handleOnchange(num,e) {
+    console.log(this.refs.Name.state.value)
+    switch(num){
+      case 0:
+        this.setState({date:value})
+        break
+      case 1:
+        this.setState({name:this.refs.Name.state.value})
+        break
+      case 2:
+        this.setState({age:this.refs.Age.state.value})
+        break
+      case 3:
+        this.setState({address:this.refs.Address.state.value})
+        break
+    }
+   
+  }
+ 
   render(){
-    <div style={{ background: '#ECECEC', padding: '30px' }}>
-      <Card title="Card title" bordered={false} style={{ width: 300 }}>
-        <p>Card content</p>
-        <p>Card content</p>
-        <p>Card content</p>
-      </Card>
-  </div>
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24},
+        sm: { span: 16 },
+      },
+    };
+    const dateFormat = 'YYYY-MM-DD'
+    const {name,age,address,date} = this.state
+    return(
+      <Modal 
+        title="编辑" 
+        bordered={false} 
+        visible={this.state.visible}
+        okText='确定'
+        cancelText='取消'
+        onCancel={this.handleCancle.bind(this)}
+        onOk={this.handleOk.bind(this)}
+      >
+        <Form layout='inline' {...formItemLayout} onSubmit={(e) => this.handleSubmit(e)} ref='t'>
+          <Form.Item label="日期:" >
+            <DatePicker style={{width:'300px'}} value={moment(date, dateFormat)} format={dateFormat}/>
+          </Form.Item>
+          <br />
+          <Form.Item label="姓名">
+            <Input style={{width:'300px'}}  defaultValue={name} onChange={(e) => this.handleOnchange(1,e)}  ref="Name"/>
+          </Form.Item>
+          <br />
+          <Form.Item label="年龄">
+            <Input style={{width:'300px'}} defaultValue={age} onChange={(e) => this.handleOnchange(2,e)} ref="Age"/>
+          </Form.Item>
+          <br />
+          <Form.Item label="地址">
+            <Input style={{width:'300px'}} defaultValue={address} onChange={(e) => this.handleOnchange(3,e)} ref="Address"/>
+          </Form.Item>
+          <br />
+        </Form>
+      </Modal>
+    )
+    
   }
 }
-
