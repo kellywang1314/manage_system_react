@@ -3,7 +3,7 @@ import { Router,Route,browserHistory,IndexRoute} from 'react-router'
 import Layout from '../layout/Layout'
 
 import Home from '../components/home/Home'
-import Table from '../components/basetab/Table'
+import TableList from '../components/basetab/Table'
 import Form from '../components/basetab/Form'
 import File from '../components/upload/File'
 import Image from '../components/upload/Image'
@@ -14,7 +14,7 @@ const RouteConfig = (
         <Route path='/' component={Layout}>
             <IndexRoute component={Home}/>
             <Route path="/home/home" component={Home}/>
-            <Route path="/basetab/table" component={Table}/>
+            <Route path="/basetab/table" component={TableList}/>
             <Route path="/basetab/form" component={Form}/>
             <Route path="/upload/file" component={File}/>
             <Route path="/upload/image" component={Image}/>
