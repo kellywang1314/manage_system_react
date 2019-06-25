@@ -138,7 +138,6 @@ class LoadMoreList extends React.Component {
         }
       }
       !isEmpty(res) ? datalist = res : ''
-      console.log(datalist)
       return (
         <div>
           <div style={{ marginBottom: 16 }}>

@@ -41,4 +41,4 @@ export const hash = (text) =>{
     }
     return hash >>> 0
 }
-return hash
+

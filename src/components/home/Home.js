@@ -21,9 +21,7 @@ export default class Home extends React.Component{
                 minHeight: 680,
                 }}
             >
-                <div>
-                 <DatePicker onChange={this.onChange1} />
-                 </div>
+                首页
             </Content>
         )
     }
