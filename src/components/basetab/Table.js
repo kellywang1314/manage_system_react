@@ -1,8 +1,8 @@
 import React from 'react'
 import moment from 'moment'
-import {isEmpty} from '../../share/utils'
+import { isEmpty,hash } from '../../share/utils'
 import { Layout,Table, Icon, Divider,Button, Modal,Popconfirm,Input,DatePicker,Form  } from 'antd';
-const { Content} = Layout
+const { Content } = Layout
 //mock数据
 const data = [];
 for (let i = 0; i < 46; i++) {
@@ -20,14 +20,19 @@ export default class TableList extends React.Component{
         this.state = {
           isShowCards:false,
           editRecord:{},
-          editedRecord:{}
+          editedRecord:{},  
         }
-    }
+       this.handleToggleEdit = this.handleToggleEdit.bind(this)
+       this.handleEdited = this.handleEdited.bind(this)
 
+    }
     handleToggleEdit(state,record){
       this.setState({isShowCards:state,editRecord:record})
     }
     handleEdited(state,record){
+      if(isEmpty(record)){
+        this.setState({isShowCards:state})
+      }
       this.setState({isShowCards:state,editedRecord:record})
     }
     render(){
@@ -37,20 +42,19 @@ export default class TableList extends React.Component{
                 style={{
                 background: '#fff',
                 padding: 24,
-                margin: 0,
                 minHeight: 680,
                 }}
             >
                 <LoadMoreList 
                   state={{isShowCards,editRecord,editedRecord}} 
-                  handleToggleEdit={this.handleToggleEdit.bind(this)}
+                  handleToggleEdit={this.handleToggleEdit}
+                  handleEdited={this.handleEdited}
                   />
-                {isShowCards && <Cards  state={{isShowCards,editRecord}}  handleEdited={this.handleEdited.bind(this)}/>}
+                {isShowCards && <Cards  state={{isShowCards,editRecord}}  handleEdited={this.handleEdited}/>}
             </Content>
         )
     }
 }
-
 class LoadMoreList extends React.Component {
     constructor(props){
       super(props)
@@ -89,13 +93,11 @@ class LoadMoreList extends React.Component {
         }
       ]
       this.state = {
-        selectedRowKeys: [],
         loading: false,
         isShowCards:this.props.state.isShowCards,
         editRecord:this.props.state.editRecord,
         editedRecord:this.props.state.editedRecord,
         datalist: data,
-        count:46
       }
     }
 
@@ -111,36 +113,32 @@ class LoadMoreList extends React.Component {
       let { datalist } = this.state
       this.setState({datalist:datalist.filter(item => item.key !==record.key)})
     }
-
-    onSelectChange (selectedRowKeys){
-      console.log('selectedRowKeys changed: ', selectedRowKeys);
-      this.setState({ selectedRowKeys });
+    handleAdd(record) {
+      this.props.handleEdited(true,{})
     }
-
-    handleAdd() {
-
-    }
-
     handleEdit(record) {
       this.props.handleToggleEdit(true,record)
     }
     render() {
-      let { selectedRowKeys,datalist,editedRecord,editRecord } = this.state
-      const rowSelection = {
-        selectedRowKeys,
-        onChange: this.onSelectChange.bind(this),
-      }
+      let { datalist,editedRecord,editRecord } = this.state
       let res=[]
-      if(!isEmpty(editedRecord) && !isEmpty(editRecord)){
-         res = datalist.map((item,index)=>{
-          if(item.key === editRecord.key){
-            item = editedRecord
-          }
-          item = item
-          return item
-        })
+      if(!isEmpty(editedRecord)){
+        //修改
+        if(!isEmpty(editRecord)){
+          res = datalist.map((item,index)=>{
+            if(item.key === editRecord.key){
+              item = editedRecord
+            }
+            item = item
+            return item
+          })
+        //增加
+        }else{
+          res = datalist.unshift(editedRecord)
+        }
       }
       !isEmpty(res) ? datalist = res : ''
+      console.log(datalist)
       return (
         <div>
           <div style={{ marginBottom: 16 }}>
@@ -149,7 +147,6 @@ class LoadMoreList extends React.Component {
             </Button>
           </div>
           <Table 
-            rowSelection={rowSelection} 
             columns={this.columns} 
             dataSource={datalist} 
           />
@@ -162,43 +159,49 @@ class LoadMoreList extends React.Component {
 class Cards extends React.Component {
   constructor(props){
     super(props)
+    let propseditRecord = this.props.state.editRecord
     this.state = {
       visible:this.props.state.isShowCards,
-      editRecord:this.props.state.editRecord,
-      date:this.props.state.editRecord.date,
-      name:this.props.state.editRecord.name,
-      age:this.props.state.editRecord.age,
-      address:this.props.state.editRecord.address
+      editRecord: propseditRecord,
+      date:isEmpty(propseditRecord)? '' : propseditRecord.date ,
+      name:isEmpty(propseditRecord)? '' : propseditRecord.name,
+      age:isEmpty(propseditRecord)? '' : propseditRecord.age,
+      address:isEmpty(propseditRecord)? '' : propseditRecord.address
     }
+    this.handleDatelChange = this.handleDatelChange.bind(this)
   }
   handleCancle(){
     this.setState({visible:false})
+    this.props.handleEdited(false,{})
   }
   handleOk(e){
     const {name,age,address,date,editRecord} = this.state
     this.setState({visible:false})
-    let newitem = {key:editRecord.key,name:name,date:date,age:age,address:address}
+    let key = isEmpty(editRecord) ? hash(name+date+age+address) : editRecord.key
+    let newitem = {key:key,name:name,date:date,age:age,address:address}
     this.props.handleEdited(false,newitem)
   }
   handleOnchange(num,e) {
-    console.log(this.refs.Name.state.value)
     switch(num){
       case 0:
         this.setState({date:value})
         break
       case 1:
-        this.setState({name:this.refs.Name.state.value})
+        this.setState({name:e.currentTarget.value})
         break
       case 2:
-        this.setState({age:this.refs.Age.state.value})
+        this.setState({age:e.currentTarget.value})
         break
       case 3:
-        this.setState({address:this.refs.Address.state.value})
+        this.setState({address:e.currentTarget.value})
         break
     }
    
   }
  
+  handleDatelChange(date,dateString){
+    this.setState({date:dateString})
+  }
   render(){
     const formItemLayout = {
       labelCol: {
@@ -224,7 +227,8 @@ class Cards extends React.Component {
       >
         <Form layout='inline' {...formItemLayout} onSubmit={(e) => this.handleSubmit(e)} ref='t'>
           <Form.Item label="日期:" >
-            <DatePicker style={{width:'300px'}} value={moment(date, dateFormat)} format={dateFormat}/>
+            {date && <DatePicker style={{width:'300px'}} defaultValue={moment(date, dateFormat)} onChange={this.handleDatelChange}/>}
+            {!date && <DatePicker style={{width:'300px'}}  onChange={this.handleDatelChange}/>}
           </Form.Item>
           <br />
           <Form.Item label="姓名">
@@ -241,7 +245,6 @@ class Cards extends React.Component {
           <br />
         </Form>
       </Modal>
-    )
-    
+    ) 
   }
 }

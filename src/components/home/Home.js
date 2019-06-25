@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, } from 'antd'
+import { Layout,DatePicker } from 'antd'
 const { Content} = Layout
 export default class Home extends React.Component{
     constructor(props){
@@ -7,6 +7,10 @@ export default class Home extends React.Component{
         this.state = {
         }
     }
+    onChange1(date, dateString) {
+        console.log(date, dateString);
+    }
+      
 
     render(){
         return(
@@ -17,7 +21,9 @@ export default class Home extends React.Component{
                 minHeight: 680,
                 }}
             >
-                首页
+                <div>
+                 <DatePicker onChange={this.onChange1} />
+                 </div>
             </Content>
         )
     }

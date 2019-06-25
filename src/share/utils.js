@@ -32,3 +32,13 @@ export const deepClone = obj => {
     }
     return res
 }
+
+//生成唯一key
+export const hash = (text) =>{
+    let hash = 5381,index = text.length
+    while (index) {
+        hash = (hash * 33) ^ text.charCodeAt(--index)
+    }
+    return hash >>> 0
+}
+return hash
