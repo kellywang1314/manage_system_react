@@ -95835,7 +95835,7 @@ var _Project = _interopRequireDefault(require("../components/about/Project"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var RouteConfig = _react.default.createElement(_reactRouter.Router, {
-  history: _reactRouter.browserHistory
+  history: _reactRouter.hashHistory
 }, _react.default.createElement(_reactRouter.Route, {
   path: "/",
   component: _Layout.default

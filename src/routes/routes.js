@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router,Route,browserHistory,IndexRoute} from 'react-router'
+import { Router,Route,browserHistory,hashHistory,IndexRoute} from 'react-router'
 import Layout from '../layout/Layout'
 
 import Home from '../components/home/Home'
@@ -10,7 +10,7 @@ import Image from '../components/upload/Image'
 import Author from '../components/about/Author'
 import Project from '../components/about/Project'
 const RouteConfig = (
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
         <Route path='/' component={Layout}>
             <IndexRoute component={Home}/>
             <Route path="/home/home" component={Home}/>
