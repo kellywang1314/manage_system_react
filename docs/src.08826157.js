@@ -1243,4 +1243,4 @@ var i=require("./isObject"),t=require("./now"),n=require("./toNumber"),r="Expect
 },{"react":"HdMw","react-router":"PPtk","../layout/Layout":"nrZz","../components/home/Home":"NP5Q","../components/basetab/Table":"UWc8","../components/basetab/Form":"6YEs","../components/upload/File":"N6gh","../components/upload/Image":"uuv9","../components/about/Author":"I/MZ","../components/about/Project":"qFSi"}],"H99C":[function(require,module,exports) {
 "use strict";var e=require("react-dom"),r=t(require("./routes/routes"));function t(e){return e&&e.__esModule?e:{default:e}}(0,e.render)(r.default,document.getElementById("root"));
 },{"react-dom":"X9zx","./routes/routes":"PZAE"}]},{},["H99C"], null)
-//# sourceMappingURL=manage_system_react/src.08826157.js.map
+//# sourceMappingURL=src.08826157.js.map
