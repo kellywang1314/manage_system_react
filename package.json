@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel index.html",
-    "build": "npx parcel build *.html --no-cache --out-dir docs --public-url ./"
+    "build": "npx parcel build *.html --no-cache --out-dir docs --public-url manage_system_react/"
   },
   "keywords": [
     "react"
