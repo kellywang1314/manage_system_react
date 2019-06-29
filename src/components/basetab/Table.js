@@ -1,8 +1,10 @@
 import React from 'react'
 import moment from 'moment'
 import { isEmpty,hash } from '../../share/utils'
-import { Layout,Table, Icon, Divider,Button, Modal,Popconfirm,Input,DatePicker,Form  } from 'antd';
+import { Layout,Table, Icon, Divider,Button, Modal,Popconfirm,Input,DatePicker,Form,Select  } from 'antd';
 const { Content } = Layout
+const { Search } = Input
+const { Option } = Select
 //mock数据
 const data = [];
 for (let i = 0; i < 46; i++) {
@@ -20,13 +22,18 @@ export default class TableList extends React.Component{
         this.state = {
           isShowCards:false,
           editRecord:{},
-          editedRecord:{},  
+          editedRecord:{}, 
+          delectItems:[], 
         }
        this.handleToggleEdit = this.handleToggleEdit.bind(this)
        this.handleEdited = this.handleEdited.bind(this)
+       this.handleDelect = this.handleDelect.bind(this)
 
     }
     handleToggleEdit(state,record){
+      if(isEmpty(record)){
+        this.setState({isShowCards:state})
+      }
       this.setState({isShowCards:state,editRecord:record})
     }
     handleEdited(state,record){
@@ -35,8 +42,14 @@ export default class TableList extends React.Component{
       }
       this.setState({isShowCards:state,editedRecord:record})
     }
+    
+    handleDelect(items){
+      this.setState({
+        delectItems:items
+      })
+    }
     render(){
-        const { isShowCards,editRecord,editedRecord } = this.state
+        const { isShowCards,editRecord,editedRecord,delectItems } = this.state
         return(
             <Content
                 style={{
@@ -46,9 +59,10 @@ export default class TableList extends React.Component{
                 }}
             >
                 <LoadMoreList 
-                  state={{isShowCards,editRecord,editedRecord}} 
+                  state={{isShowCards,editRecord,editedRecord,delectItems}} 
                   handleToggleEdit={this.handleToggleEdit}
                   handleEdited={this.handleEdited}
+                  handleDelect={this.handleDelect}
                   />
                 {isShowCards && <Cards  state={{isShowCards,editRecord}}  handleEdited={this.handleEdited}/>}
             </Content>
@@ -98,6 +112,8 @@ class LoadMoreList extends React.Component {
         editRecord:this.props.state.editRecord,
         editedRecord:this.props.state.editedRecord,
         datalist: data,
+        selectedRowKeys: [],
+        delectItems:this.props.state.delectItems
       }
     }
 
@@ -108,19 +124,33 @@ class LoadMoreList extends React.Component {
           editRecord:nextprops.state.editRecord
         })
       }
+      if(this.state.delectItems!== nextprops.state.delectItems){
+        this.setState({delectItems:nextprops.state.delectItems})
+      }
     }
     handleDelete (record) {
       let { datalist } = this.state
       this.setState({datalist:datalist.filter(item => item.key !==record.key)})
     }
-    handleAdd(record) {
+    handleAdd() {
+      this.props.handleToggleEdit(true,{})
       this.props.handleEdited(true,{})
+
     }
     handleEdit(record) {
       this.props.handleToggleEdit(true,record)
     }
+    onSelectChange (selectedRowKeys){
+      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      this.setState({ selectedRowKeys })
+    }
+    handleDelectMuit(){
+      const { selectedRowKeys } = this.state
+      this.props.handleDelect(selectedRowKeys)
+    }
+  
     render() {
-      let { datalist,editedRecord,editRecord } = this.state
+      let { datalist,editedRecord,editRecord,selectedRowKeys,delectItems } = this.state
       let res=[]
       if(!isEmpty(editedRecord)){
         //修改
@@ -137,20 +167,45 @@ class LoadMoreList extends React.Component {
           res = datalist.unshift(editedRecord)
         }
       }
+      //删除
+      if(!isEmpty(delectItems)){
+        datalist.map((item,index) => {
+          if(delectItems.indexOf(item.key)===-1){
+            res.push(item)
+          }
+        })
+      }
       !isEmpty(res) ? datalist = res : ''
+      const rowSelection = {
+        selectedRowKeys,
+        onChange: this.onSelectChange.bind(this),
+        hideDefaultSelections: true,
+       
+      };
       return (
         <div>
-          <div style={{ marginBottom: 16 }}>
-            <Button type="primary" onClick={() => this.handleAdd()}>
+          <div style={{ marginBottom: 16}}>
+            <Button type="primary" onClick={() => this.handleAdd()} style={{marginRight:'10px'}}>
               添加
             </Button>
+            <Button type="primary" onClick={() => this.handleDelectMuit()} style={{marginRight:'10px'}}>
+              批量删除
+            </Button>
+            <Search
+              placeholder="请输入用户名"
+              enterButton="查询"
+              size = 'default'
+              onSearch={value => console.log(value)}
+              style={{width:'30%'}}
+            />
           </div>
           <Table 
             columns={this.columns} 
-            dataSource={datalist} 
+            dataSource={datalist}
+            rowSelection={rowSelection} 
           />
         </div>
-      );
+      )
     }
 }
 
