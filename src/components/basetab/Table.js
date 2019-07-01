@@ -113,7 +113,8 @@ class LoadMoreList extends React.Component {
         editedRecord:this.props.state.editedRecord,
         datalist: data,
         selectedRowKeys: [],
-        delectItems:this.props.state.delectItems
+        delectItems:this.props.state.delectItems,
+        keyword:''
       }
     }
 
@@ -148,9 +149,15 @@ class LoadMoreList extends React.Component {
       const { selectedRowKeys } = this.state
       this.props.handleDelect(selectedRowKeys)
     }
+    //查询
+    onSearch(value){
+      this.setState({
+        keyword:value
+      })
+    }
   
     render() {
-      let { datalist,editedRecord,editRecord,selectedRowKeys,delectItems } = this.state
+      let { datalist,editedRecord,editRecord,selectedRowKeys,delectItems,keyword} = this.state
       let res=[]
       if(!isEmpty(editedRecord)){
         //修改
@@ -175,13 +182,22 @@ class LoadMoreList extends React.Component {
           }
         })
       }
-      !isEmpty(res) ? datalist = res : ''
+      //搜索
+      if(keyword!=''){
+        datalist.map((item,index) => {
+          let items = item.date + item.name + item.key + item.address+''
+          if(items.indexOf(keyword)!=-1){
+            res.push(item)
+          }
+        })
+      }
       const rowSelection = {
         selectedRowKeys,
         onChange: this.onSelectChange.bind(this),
         hideDefaultSelections: true,
        
       };
+      !isEmpty(res) ? datalist = res : ''
       return (
         <div>
           <div style={{ marginBottom: 16}}>
@@ -195,7 +211,7 @@ class LoadMoreList extends React.Component {
               placeholder="请输入用户名"
               enterButton="查询"
               size = 'default'
-              onSearch={value => console.log(value)}
+              onSearch={this.onSearch.bind(this)}
               style={{width:'30%'}}
             />
           </div>

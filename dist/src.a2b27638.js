@@ -95218,7 +95218,8 @@ function (_React$Component2) {
       editedRecord: _this2.props.state.editedRecord,
       datalist: data,
       selectedRowKeys: [],
-      delectItems: _this2.props.state.delectItems
+      delectItems: _this2.props.state.delectItems,
+      keyword: ''
     };
     return _this2;
   }
@@ -95273,6 +95274,14 @@ function (_React$Component2) {
     value: function handleDelectMuit() {
       var selectedRowKeys = this.state.selectedRowKeys;
       this.props.handleDelect(selectedRowKeys);
+    } //查询
+
+  }, {
+    key: "onSearch",
+    value: function onSearch(value) {
+      this.setState({
+        keyword: value
+      });
     }
   }, {
     key: "render",
@@ -95284,7 +95293,8 @@ function (_React$Component2) {
           editedRecord = _this$state2.editedRecord,
           editRecord = _this$state2.editRecord,
           selectedRowKeys = _this$state2.selectedRowKeys,
-          delectItems = _this$state2.delectItems;
+          delectItems = _this$state2.delectItems,
+          keyword = _this$state2.keyword;
       var res = [];
 
       if (!(0, _utils.isEmpty)(editedRecord)) {
@@ -95310,14 +95320,25 @@ function (_React$Component2) {
             res.push(item);
           }
         });
+      } //搜索
+
+
+      if (keyword != '') {
+        datalist.map(function (item, index) {
+          var items = item.date + item.name + item.key + item.address + '';
+
+          if (items.indexOf(keyword) != -1) {
+            res.push(item);
+          }
+        });
       }
 
-      !(0, _utils.isEmpty)(res) ? datalist = res : '';
       var rowSelection = {
         selectedRowKeys: selectedRowKeys,
         onChange: this.onSelectChange.bind(this),
         hideDefaultSelections: true
       };
+      !(0, _utils.isEmpty)(res) ? datalist = res : '';
       return _react.default.createElement("div", null, _react.default.createElement("div", {
         style: {
           marginBottom: 16
@@ -95342,9 +95363,7 @@ function (_React$Component2) {
         placeholder: "\u8BF7\u8F93\u5165\u7528\u6237\u540D",
         enterButton: "\u67E5\u8BE2",
         size: "default",
-        onSearch: function onSearch(value) {
-          return console.log(value);
-        },
+        onSearch: this.onSearch.bind(this),
         style: {
           width: '30%'
         }
@@ -95989,7 +96008,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51501" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53637" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
