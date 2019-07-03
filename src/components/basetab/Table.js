@@ -311,7 +311,7 @@ class Cards extends React.Component {
           </Form.Item>
           <br />
           <Form.Item label="年龄"  validateStatus={tips ? 'error':''} help={tips}>
-            <Input style={{width:'300px'}} defaultValue={age} onChange={(e) => this.handleOnchange(2,e)} onBlur={(e) => this.handleOnblur(e)} ref="Age"/>
+            <Input style={{width:'300px'}} defaultValue={age} onChange={(e) => this.handleOnchange(2,e)} ref="Age"/>
           </Form.Item>
           <br />
           <Form.Item label="地址">
