@@ -236,10 +236,12 @@ class Cards extends React.Component {
       date:isEmpty(propseditRecord)? '' : propseditRecord.date ,
       name:isEmpty(propseditRecord)? '' : propseditRecord.name,
       age:isEmpty(propseditRecord)? '' : propseditRecord.age,
-      address:isEmpty(propseditRecord)? '' : propseditRecord.address
+      address:isEmpty(propseditRecord)? '' : propseditRecord.address,
+      tips:''
     }
     this.handleDatelChange = this.handleDatelChange.bind(this)
   }
+
   handleCancle(){
     this.setState({visible:false})
     this.props.handleEdited(false,{})
@@ -252,6 +254,8 @@ class Cards extends React.Component {
     this.props.handleEdited(false,newitem)
   }
   handleOnchange(num,e) {
+    let tip = e.currentTarget.value ? (/^[1-9]\d*$/.test(e.currentTarget.value))? this.setState({age:e.currentTarget.value,tips:''}) :
+    this.setState({tips:'请输入数字'}):this.setState({tips:''})
     switch(num){
       case 0:
         this.setState({date:value})
@@ -260,7 +264,7 @@ class Cards extends React.Component {
         this.setState({name:e.currentTarget.value})
         break
       case 2:
-        this.setState({age:e.currentTarget.value})
+        tip
         break
       case 3:
         this.setState({address:e.currentTarget.value})
@@ -272,6 +276,7 @@ class Cards extends React.Component {
   handleDatelChange(date,dateString){
     this.setState({date:dateString})
   }
+
   render(){
     const formItemLayout = {
       labelCol: {
@@ -284,7 +289,7 @@ class Cards extends React.Component {
       },
     };
     const dateFormat = 'YYYY-MM-DD'
-    const {name,age,address,date} = this.state
+    const {name,age,address,date,tips} = this.state
     return(
       <Modal 
         title="编辑" 
@@ -305,8 +310,8 @@ class Cards extends React.Component {
             <Input style={{width:'300px'}}  defaultValue={name} onChange={(e) => this.handleOnchange(1,e)}  ref="Name"/>
           </Form.Item>
           <br />
-          <Form.Item label="年龄">
-            <Input style={{width:'300px'}} defaultValue={age} onChange={(e) => this.handleOnchange(2,e)} ref="Age"/>
+          <Form.Item label="年龄"  validateStatus={tips ? 'error':''} help={tips}>
+            <Input style={{width:'300px'}} defaultValue={age} onChange={(e) => this.handleOnchange(2,e)} onBlur={(e) => this.handleOnblur(e)} ref="Age"/>
           </Form.Item>
           <br />
           <Form.Item label="地址">

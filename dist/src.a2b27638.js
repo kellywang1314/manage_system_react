@@ -95396,7 +95396,8 @@ function (_React$Component3) {
       date: (0, _utils.isEmpty)(propseditRecord) ? '' : propseditRecord.date,
       name: (0, _utils.isEmpty)(propseditRecord) ? '' : propseditRecord.name,
       age: (0, _utils.isEmpty)(propseditRecord) ? '' : propseditRecord.age,
-      address: (0, _utils.isEmpty)(propseditRecord) ? '' : propseditRecord.address
+      address: (0, _utils.isEmpty)(propseditRecord) ? '' : propseditRecord.address,
+      tips: ''
     };
     _this4.handleDatelChange = _this4.handleDatelChange.bind(_assertThisInitialized(_this4));
     return _this4;
@@ -95435,6 +95436,15 @@ function (_React$Component3) {
   }, {
     key: "handleOnchange",
     value: function handleOnchange(num, e) {
+      var tip = e.currentTarget.value ? /^[1-9]\d*$/.test(e.currentTarget.value) ? this.setState({
+        age: e.currentTarget.value,
+        tips: ''
+      }) : this.setState({
+        tips: '请输入数字'
+      }) : this.setState({
+        tips: ''
+      });
+
       switch (num) {
         case 0:
           this.setState({
@@ -95449,9 +95459,7 @@ function (_React$Component3) {
           break;
 
         case 2:
-          this.setState({
-            age: e.currentTarget.value
-          });
+          tip;
           break;
 
         case 3:
@@ -95496,7 +95504,8 @@ function (_React$Component3) {
           name = _this$state4.name,
           age = _this$state4.age,
           address = _this$state4.address,
-          date = _this$state4.date;
+          date = _this$state4.date,
+          tips = _this$state4.tips;
       return _react.default.createElement(_modal.default, {
         title: "\u7F16\u8F91",
         bordered: false,
@@ -95537,7 +95546,9 @@ function (_React$Component3) {
         },
         ref: "Name"
       })), _react.default.createElement("br", null), _react.default.createElement(_form.default.Item, {
-        label: "\u5E74\u9F84"
+        label: "\u5E74\u9F84",
+        validateStatus: tips ? 'error' : '',
+        help: tips
       }, _react.default.createElement(_input.default, {
         style: {
           width: '300px'
@@ -95545,6 +95556,9 @@ function (_React$Component3) {
         defaultValue: age,
         onChange: function onChange(e) {
           return _this5.handleOnchange(2, e);
+        },
+        onBlur: function onBlur(e) {
+          return _this5.handleOnblur(e);
         },
         ref: "Age"
       })), _react.default.createElement("br", null), _react.default.createElement(_form.default.Item, {
@@ -96008,7 +96022,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53637" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57416" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
