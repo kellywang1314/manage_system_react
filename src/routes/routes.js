@@ -10,6 +10,8 @@ import Image from '../components/upload/Image'
 import Author from '../components/about/Author'
 import Project from '../components/about/Project'
 import Scroll from '../components/infinitescroll/Scroll'
+import Line from '../components/char/Line'
+import Map from '../components/char/Map'
 const RouteConfig = (
     <Router history={hashHistory}>
         <Route path='/' component={Layout}>
@@ -19,6 +21,8 @@ const RouteConfig = (
             <Route path="/basetab/form" component={Form}/>
             <Route path="/upload/file" component={File}/>
             <Route path="/upload/image" component={Image}/>
+            <Route path="char/line" component={ Line}/>
+            <Route path="/char/map" component={Map}/>
             <Route path="/about/author" component={Author}/>
             <Route path="/about/project" component={Project}/>
             <Route path="/infinitescroll/scroll" component={Scroll}/>
