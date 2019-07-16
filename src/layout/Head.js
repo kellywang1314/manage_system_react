@@ -3,6 +3,7 @@ import { Layout, Menu, Icon } from 'antd'
 import '../css/base.css'
 const { SubMenu } = Menu
 const { Header } = Layout
+var a=[]
 export default class Head extends React.Component{
     constructor(props){
       super(props)
