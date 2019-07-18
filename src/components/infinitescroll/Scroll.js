@@ -1,33 +1,66 @@
 import React from 'react'
 import { Layout, List,Avatar} from 'antd'
 import { products } from './mock'
+import axios from 'axios'
 const { Content} = Layout
+let num = 1
 export default class Author extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            list:products
+            list:[]
         }
         this.handlescroll = this.handlescroll.bind(this)
     }
     componentDidMount(){
-       
+        this.handlefetch()
         window.addEventListener('scroll',this.handlescroll,false)
     }
 
-    handlescroll(){
+    async handlescroll(){
         //文档高度
         let doumentHeight =document.body.scrollHeight
         //可见区域高度
         let cilenttheight = document.body.clientHeight
         //卷去部分高度
         let scrolltop = document.body.scrollTop
-        let {list:oldlist} = this.state
-        if(cilenttheight+scrolltop+100>doumentHeight){
-            this.setState({
-                list:oldlist.concat(products)
-            })
+        if(cilenttheight+scrolltop+50>doumentHeight){
+            await this.handlefetch()
         }
+    }
+
+
+     async handlefetch(){
+        let that = this
+        let filtered = {
+            channel: "H5",
+            items: [],
+            pageIndex: num,
+            pageSize: 10,
+            saleCity: 2,
+            sort: 8,
+            startCity: 2,
+        }
+        axios.post('https://sec-m.ctrip.com/restapi/soa2/13561/search',
+        {contentType:"json",filtered:filtered}).then(
+            (res) => {
+                num++
+                let products = res.data.products
+                let proKeyQuery = products.map(item => {return {id:item.id,buType: "GT", deptCity: 0}})
+                let param = {
+                    proKeyQuery,
+                    //imageOption:{width: 480, height: 320},
+                    imageOption:{width: 600, height: 320},
+                    contentType:"json",
+                    channel: "h5"
+                }
+                axios.post('https://sec-m.ctrip.com/restapi/soa2/11899/proInfo4static',param).then((resp)=>{
+                    let {list:oldlist} = this.state
+                    that.setState({list:oldlist.concat(resp.data.items)})
+                })
+            }
+
+        )
     }
 
 
@@ -48,9 +81,9 @@ export default class Author extends React.Component{
                 renderItem={item => (
                 <List.Item>
                 <List.Item.Meta
-                    avatar={<img src='https://dimg06.c-ctrip.com/images/1007050000000s35fE7FA_C_180_230.jpg'/>}
-                    title={item.hotelName}
-                    description={item.name}
+                    avatar={<img src={item.image}/>}
+                    title={item.brandName}
+                    description={item.proName}
                 />
                 </List.Item>
     )}
@@ -59,3 +92,7 @@ export default class Author extends React.Component{
         )
     }
 }
+
+
+
+//

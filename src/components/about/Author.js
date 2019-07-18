@@ -1,5 +1,6 @@
 import React from 'react'
-import { Layout, } from 'antd'
+import { Layout} from 'antd'
+import { Editor } from 'react-draft-wysiwyg'
 const { Content} = Layout
 export default class Author extends React.Component{
     constructor(props){

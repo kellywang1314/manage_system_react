@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx parcel build *.html --no-cache --out-dir docs --public-url ./",
     "buildweb": "cross-env NODE_ENV=production webpack --mode production",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development",
+    "dll": "webpack -p --config ./webpack.dll.config.js",
+    "homepage": "https://kellywang1314.github.io/manage_system_react/"
   },
   "keywords": [
     "react"
@@ -16,7 +18,9 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^3.19.2",
+    "axios": "^0.19.0",
     "babel-plugin-import": "^1.12.0",
+    "draft-js": "^0.11.0",
     "eslint-plugin-react": "^7.14.2",
     "gulp": "^4.0.2",
     "m": "^1.5.4",
@@ -27,6 +31,7 @@
     "r": "0.0.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-draft-wysiwyg": "^1.13.2",
     "react-router": "^3.2.1",
     "redux": "^4.0.1",
     "reqwest": "^2.0.5",
@@ -37,6 +42,7 @@
   "devDependencies": {
     "@babel/cli": "^7.5.0",
     "@babel/core": "^7.5.4",
+    "@babel/plugin-transform-runtime": "^7.5.0",
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.2",

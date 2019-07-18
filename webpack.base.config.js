@@ -9,7 +9,7 @@ module.exports = {
     entry:  __dirname + '/src/index.js',
     output:{
         path: __dirname + '/docs',
-        filename:'bundle.js'
+        filename:'bundle.js',
     },
     module:{
         rules:[
@@ -47,7 +47,11 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template:resolve('index.html')
-        })
+        }),
+        /* new webpack.DllReferencePlugin({
+            context: __dirname,
+            manifest: require('./manifest.json'),
+        }), */
     ]
 
 
