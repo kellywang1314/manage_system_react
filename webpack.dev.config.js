@@ -1,8 +1,9 @@
 const path = require('webpack')
 module.exports = {
     devServer:{
-        contentBase:'./docs',
+        contentBase:'./src',
         historyApiFallback:true,
-        inline:true
+        inline:true,
+        hot: true
     }
 }

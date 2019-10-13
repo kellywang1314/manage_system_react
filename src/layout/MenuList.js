@@ -42,7 +42,10 @@ export default class MenuList extends React.Component{
           <SubMenu key="sub5" title={<span><Icon type="check-circle" />无限滚动优化</span>}>
               <Menu.Item key="sub5-1"><Link to="/infinitescroll/scroll" >无限滚动优化组件</Link></Menu.Item>
           </SubMenu>
-          <SubMenu key="sub6" title={<span><Icon type="exclamation-circle" />关于</span>}>
+          <SubMenu key="sub6" title={<span><Icon type="edit" />富文本</span>}>
+              <Menu.Item key="sub5-1"><Link to="/richtext/richtext" >富文本</Link></Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub7" title={<span><Icon type="exclamation-circle" />关于</span>}>
             <Menu.Item key="sub6-1"><Link to="/about/author">关于作者</Link></Menu.Item>
             <Menu.Item key="sub6-2"><Link to="/about/project">关于项目</Link></Menu.Item>
           </SubMenu>

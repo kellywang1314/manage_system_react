@@ -48,6 +48,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template:resolve('index.html')
         }),
+        new webpack.HotModuleReplacementPlugin()
         /* new webpack.DllReferencePlugin({
             context: __dirname,
             manifest: require('./manifest.json'),
