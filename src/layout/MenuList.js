@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-import { Menu, Icon } from 'antd'
+import { Menu, Icon} from 'antd'
 import '../css/base.css'
 const { SubMenu } = Menu
 export default class MenuList extends React.Component{
@@ -23,13 +23,12 @@ export default class MenuList extends React.Component{
             mode="inline"
             style={{ height: '100%', borderRight: 0 }}
           >
-           
             <SubMenu  key="sub1" title={<span><Icon type="home" />首页</span>}>
               <Menu.Item key="sub1-1"><Link to="/home/home">首页</Link></Menu.Item>
             </SubMenu>
             <SubMenu key="sub2" title={<span><Icon type="form" />基本表</span>}>
-              <Menu.Item key="sub1-1"><Link to="/basetab/table">表格</Link></Menu.Item>
-              <Menu.Item key="sub1-2"><Link to="/basetab/form">表单</Link></Menu.Item>
+              <Menu.Item key="sub2-1"><Link to="/basetab/table">表格</Link></Menu.Item>
+              <Menu.Item key="sub2-2"><Link to="/basetab/form">表单</Link></Menu.Item>
             </SubMenu>
             <SubMenu key="sub3" title={<span><Icon type="laptop" />上传功能</span>}>
               <Menu.Item key="sub3-1"><Link to="/upload/image">图片上传</Link></Menu.Item>
@@ -43,11 +42,11 @@ export default class MenuList extends React.Component{
               <Menu.Item key="sub5-1"><Link to="/infinitescroll/scroll" >无限滚动优化组件</Link></Menu.Item>
           </SubMenu>
           <SubMenu key="sub6" title={<span><Icon type="edit" />富文本</span>}>
-              <Menu.Item key="sub5-1"><Link to="/richtext/richtext" >富文本</Link></Menu.Item>
+              <Menu.Item key="sub6-1"><Link to="/richtext/richtext" >富文本</Link></Menu.Item>
           </SubMenu>
           <SubMenu key="sub7" title={<span><Icon type="exclamation-circle" />关于</span>}>
-            <Menu.Item key="sub6-1"><Link to="/about/author">关于作者</Link></Menu.Item>
-            <Menu.Item key="sub6-2"><Link to="/about/project">关于项目</Link></Menu.Item>
+            <Menu.Item key="sub7-1"><Link to="/about/author">关于作者</Link></Menu.Item>
+            <Menu.Item key="sub7-2"><Link to="/about/project">关于项目</Link></Menu.Item>
           </SubMenu>
         </Menu>    
         )

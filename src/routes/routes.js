@@ -1,6 +1,5 @@
 import React from 'react'
 import { Router,Route,browserHistory,hashHistory,IndexRoute} from 'react-router'
-
 import Layout from '../layout/Layout'
 import Home from '../components/home/Home'
 import TableList from '../components/basetab/Table'

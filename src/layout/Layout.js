@@ -2,11 +2,14 @@ import React from 'react'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd'
 import Head from './Head'
 import MenuList from './MenuList'
+import Bcrumb from '../common/BreadcrumbCustom'
 const { Content, Sider } = Layout
+import { BcrumbList,IconList } from '../constant/index'
 export default class PageLayout extends React.Component{
     constructor(props){
       super(props)
     }
+
     render(){
         return(
             <Layout>
@@ -16,6 +19,7 @@ export default class PageLayout extends React.Component{
                   <MenuList />
                 </Sider>
                 <Layout style={{ padding:'0 24px 24px',marginTop:'24' }}>
+                <Bcrumb title={BcrumbList[this.props.location.pathname]} icon={IconList[this.props.location.pathname]}/>
                   <Content
                     style={{
                       background: '#fff',
