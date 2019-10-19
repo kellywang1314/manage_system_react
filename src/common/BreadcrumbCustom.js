@@ -11,7 +11,7 @@ export default class Bcrumb extends Component {
 	render() {
 		console.log(this.props)
 		return (
-			<Breadcrumb className="bread-crumb">
+			<Breadcrumb className="bread-crumb" style={{paddingLeft:'24px'}}>
                 <Breadcrumb.Item>
                     <Link to="/home/home"><Icon type="home" /><span>主页</span></Link>
                 </Breadcrumb.Item>

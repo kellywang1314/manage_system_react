@@ -15,15 +15,23 @@ export default class PageLayout extends React.Component{
             <Layout>
               <Head />
               <Layout>
-                <Sider width={200} style={{ background: '#fff' }}>
+                <Sider width={200} theme={'dark'}>
                   <MenuList />
                 </Sider>
-                <Layout style={{ padding:'0 24px 24px',marginTop:'24' }}>
-                <Bcrumb title={BcrumbList[this.props.location.pathname]} icon={IconList[this.props.location.pathname]}/>
+                <Layout>
                   <Content
                     style={{
                       background: '#fff',
-                      padding: 24,
+                      marginLeft:'24px',
+                      minHeight: 10,
+                    }}
+                  >
+                    <Bcrumb title={BcrumbList[this.props.location.pathname]} icon={IconList[this.props.location.pathname]}/>
+                  </Content>
+                  <Content
+                    style={{
+                      background: '#f0f0f0',
+                      //padding: 24,
                       margin: 0,
                       minHeight: 680,
                     }}

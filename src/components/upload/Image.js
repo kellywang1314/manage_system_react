@@ -11,7 +11,6 @@ export default class Image extends React.Component {
     render() {
         return (
             <React.Fragment>
-
                 <Content
                     style={{
                         background: '#fff',
