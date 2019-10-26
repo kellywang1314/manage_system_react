@@ -12,7 +12,8 @@ export default class PageLayout extends React.Component{
 
     render(){
         return(
-            <Layout>
+            <Layout
+            >
               <Head />
               <Layout>
                 <Sider width={200} theme={'dark'}>
@@ -33,13 +34,27 @@ export default class PageLayout extends React.Component{
                       background: '#f0f0f0',
                       //padding: 24,
                       margin: 0,
-                      minHeight: 680,
+                      minHeight: 800,
                     }}
                   >
                     {this.props.children}
                   </Content>
+                  
                 </Layout>
+                
               </Layout>
+              <Content
+                    style={{
+                      background: '#f0f0f0',
+                      //marginLeft:'24px',
+                      //position:"absolute",
+                      //top:780,
+                      minHeight: 40,
+                      textAlign:'center',
+                    }}
+                  >
+                     版权所有 © 2019 由 ynan_wang(loleungve@foxmail.com) 支持
+                  </Content>
           </Layout>
         )
     }
